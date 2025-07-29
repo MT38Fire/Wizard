@@ -3,7 +3,7 @@ export const gameRules = {
   title: "Regole del Gioco Wizard",
   rules: [
     "🎯 Obiettivo: Accumula punti dichiarando e realizzando esattamente il numero di prese (trick) per ogni round. Vince chi ha il punteggio più alto alla fine.",
-    "👥 Giocatori: Da 3 a 6 giocatori. Si usa un mazzo da 40 carte (briscola o francesi adattate).",
+    "👥 Giocatori: Da 3 a 5 giocatori. Si usa un mazzo da 40 carte (briscola).",
     "🔢 Valore delle carte: Ordine dal più debole al più forte – 2, 4, 5, 6, 7, J, Q, K, 3, As.",
     "♠️ Ordine dei semi: Dal più debole al più forte – Bastoni, Spade, Coppe, Denari.",
     "🃏 Distribuzione carte: Al 1º round si danno 2 carte a ciascuno, poi 3 nel 2º round, e così via, aumentando di una carta ogni volta.",
