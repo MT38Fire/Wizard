@@ -14,5 +14,5 @@ export const gameRules = {
     "✅ Punteggio: Se fai esattamente le prese dichiarate, ottieni 10 punti + 5 per ogni presa. Altrimenti perdi 10 punti, anche se ne fai di più.",
     "🏁 Fine del gioco: Dopo l'ultimo round (quando tutte le carte sono state distribuite), vince chi ha più punti."
   ],
-  footer: "Buon divertimento dal Team Wizard!"
+  footer: "Buon divertimento!"
 };
