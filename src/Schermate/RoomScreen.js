@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import IMAGES from '../CardImages.js';
 //se IMAGES da problemi, usare CardImages_v2
+//Commenta IMAGES e scommenta le righe commentate con IMAGES2
 //import IMAGES from '../CardImages_v2.js';
 import Card from '../Card.js';
 
@@ -136,9 +137,17 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
                 return c;
               }
             ));
-            setTimeout(() => setCardsPlayed([]), 1000);
+            setTimeout(() => {
+              setCardsPlayed([]);
+              setCurrentPlayer(message.nextPlayer);
+            }, 1000);
+          } 
+          else {
+            // Se non è finito il trick, cambiamo giocatore dopo 1s
+            setTimeout(() => {
+              setCurrentPlayer(message.nextPlayer);
+            }, 1500);
           }
-          setCurrentPlayer(message.nextPlayer);
           break;
 
         case 'round_ended':
@@ -160,7 +169,6 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
 
         case 'game_ended':
           //mostra vincitore
-          //per ora solo messaggio così, si può personalizzare di più
           alert(message.result);
           setGameState('finished');
 
@@ -232,6 +240,7 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
             <div style={{ position: 'relative', marginTop: '5px' }}>
               <img
                 src={IMAGES['back']}
+                //src={IMAGES2['back']}
                 alt="card-back"
                 style={{
                   width: '50px',
@@ -298,6 +307,7 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
           <div style={{ position: 'relative', marginTop: '5px' }}>
             <img
               src={IMAGES['back']}
+              //src={IMAGES2['back']}
               alt="card-back"
               style={{
                 width: '50px',
@@ -387,6 +397,7 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
               <Card 
                 id={playedCard.card} 
                 image={IMAGES[`img_${Math.floor(playedCard.card / 10)}_${playedCard.card % 10}`]}
+                //image={IMAGES2[`img_${Math.floor(playedCard.card / 10)}_${playedCard.card % 10}`]}
                 style={{
                   width: '60px',
                   height: 'auto',
@@ -643,7 +654,8 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
                   >
                     <Card 
                       id={cardId} 
-                      image={IMAGES[`img_${Math.floor(cardId / 10)}_${cardId % 10}`]} 
+                      image={IMAGES[`img_${Math.floor(cardId / 10)}_${cardId % 10}`]}
+                      //image={IMAGES2[`img_${Math.floor(cardId / 10)}_${cardId % 10}`]}
                     />
                   </div>
                 ))}
