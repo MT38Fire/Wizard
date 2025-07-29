@@ -453,7 +453,6 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
       }, 1500);
     }
   };
-};
 
 
   const handleLeaveRoom = () => {
