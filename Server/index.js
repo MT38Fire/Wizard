@@ -178,6 +178,8 @@ function handleWebSocketMessage(roomId, user, message) {
   };
 
   function botBidding(){
+    const room = rooms.get(roomId);
+    if (!room || room.status === 'finished') return;
     setTimeout(()=>{
       const botBid = room.players[room.currentPlayer].botMakeBid(room.currentRound, room.bids, room.players.length);
       //console.log(`Bot ${room.players[room.currentPlayer].username} made bid: ${botBid}`);
@@ -202,6 +204,8 @@ function handleWebSocketMessage(roomId, user, message) {
   }
 
   function botPlayingCard(){
+    const room = rooms.get(roomId);
+    if (!room || room.status === 'finished') return;
     setTimeout(() => {
       const botCard = room.players[room.currentPlayer].botChoseCard(room.currentTrick.length !== 0 ? room.currentTrick[0].card : null);
       const usId = room.currentPlayer;
@@ -243,8 +247,19 @@ function handleWebSocketMessage(roomId, user, message) {
     case 'leave_room':
       const playerIndex = room.players.findIndex(p => p.username === user);
       if (playerIndex !== -1) {
-
         const removedPlayer = room.removePlayer(user);
+        if (activeConnections.has(user)) {
+          activeConnections.get(user).close();
+          activeConnections.delete(user);
+        }
+
+        console.log(room.realPlayers);
+        if (room.realPlayers.length === 0) { //TODO rimuovi la stanza se sono tutti bot
+          room.status= 'finished'
+          rooms.delete(roomId);
+          console.log("deleting room")
+          break
+        }
          // Rimuove il giocatore dalla stanza
         if (removedPlayer === 0) {
           broadcastToRoom(roomId, {
@@ -267,18 +282,6 @@ function handleWebSocketMessage(roomId, user, message) {
             }
           }
         }
-
-        // Chiudi la connessione
-          if (activeConnections.has(user)) {
-            activeConnections.get(user).close();
-            activeConnections.delete(user);
-          }
-
-          console.log(room.realPlayers);
-          if (room.realPlayers.length === 0) { //TODO rimuovi la stanza se sono tutti bot
-            rooms.delete(roomId);
-            console.log("deleting room")
-          }
       }
       break;
 
