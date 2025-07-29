@@ -1,0 +1,86 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App-header {
+  background-color: #181e2b;
+  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(172, 50, 50);
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/*Container per gli elementi grafici */
+.graphics-container {
+  position: relative;
+  width: 400px;
+  height: 200px;
+  margin-bottom: 20px; 
+}
+
+/* Logo (fermo, leggermente a destra) */
+.App-logo {
+  height: 200px;
+  width: 200px;
+  pointer-events: none;
+  position: absolute;
+  left: calc(50% + 20px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Palla (animata, leggermente a sinistra) */
+.App-logo-ball {
+  height: 100px;
+  width: 100px;
+  pointer-events: none;
+  position: absolute;
+  left: calc(50% - 20px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* Animazione della palla */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo-ball {
+    animation: ball-bounce infinite 3s alternate;
+  }
+}
+
+@keyframes ball-bounce {
+  from {
+    transform: translate(-50%, -80%);
+  }
+  to {
+    transform: translate(-50%, -20%);
+  }
+}
+
+/* Contenuto testuale (bottoni, titoli etc.) */
+.content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+}
+
+/* Bottoni */
+.button {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  z-index: 4;
+}
