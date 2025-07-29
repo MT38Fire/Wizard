@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import IMAGES from '../CardImages.js';
+//se IMAGES da problemi, usare CardImages_v2
+//import IMAGES from '../CardImages_v2.js';
 import Card from '../Card.js';
 
 function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
@@ -413,21 +415,6 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
       setCurrentCall(newCall);
     }
   };
-/*
-  const handleCardClick = (cardId) => {
-    if (currentPlayer === userId && currentPhase === 'playing') {
-      // Remove the card from hand
-      setCards(prev => prev.filter(c => c !== cardId));
-      
-      // Send to server
-      if (socket) {
-        socket.send(JSON.stringify({
-          type: 'play_card',
-          card: cardId
-        }));
-      }
-    }
-  };*/
 
   const handleCardClick = (cardId) => {
     if (currentPlayer === userId && currentPhase === 'playing') {
@@ -441,6 +428,12 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
         return;
       }
 
+      // Disabilita temporaneamente i click sulle carte
+      const cardElements = document.querySelectorAll('.player-card');
+      cardElements.forEach(card => {
+        card.style.pointerEvents = 'none';
+      });
+
       // Remove the card from hand
       setCards(prev => prev.filter(c => c !== cardId));
       
@@ -451,7 +444,15 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
           card: cardId
         }));
       }
+
+      // Riabilita i click dopo 1500ms (1 secondo e mezzo)
+      setTimeout(() => {
+        cardElements.forEach(card => {
+          card.style.pointerEvents = 'auto';
+        });
+      }, 1500);
     }
+  };
 };
 
 
@@ -612,8 +613,7 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
               height: '100%',
               width: '100%'
             }}>
-              <h3 style={{ textAlign: 'center' }}>{FirstSuit}</h3>
-
+              
               {/* Players around the table */}
               {renderPlayerPositions()}
 
@@ -632,6 +632,7 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
                 {cards.map((cardId, index) => (
                   <div 
                     key={index}
+                    className="player-card"
                     onClick={() => handleCardClick(cardId)}
                     style={{
                       cursor: (currentPlayer === userId && currentPhase === 'playing') ? 'pointer' : 'default',
