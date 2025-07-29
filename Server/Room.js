@@ -184,6 +184,7 @@ class Room {
       } else {
         player.score -= 10;
       }
+      player.tricksWon=0;
     });
     
     // Check if game is over or start next round
