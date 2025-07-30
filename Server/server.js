@@ -378,7 +378,7 @@ function broadcastToRoom(roomId, message, excludeUsernames = null) {
   const room = rooms.get(roomId);
   if (!room) return;
 
-  room.players.forEach(player => {
+  room.realPlayers.forEach(player => {
     if (player.username !== excludeUsernames && activeConnections.has(player.username)) {
       const ws = activeConnections.get(player.username);
       if (ws.readyState === ws.OPEN) {
