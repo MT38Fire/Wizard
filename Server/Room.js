@@ -31,9 +31,7 @@ class Room {
 
   removePlayer(username) {
     const playerIndex = this.players.findIndex(p => p.username === username);
-    console.log("prova a cavare")
     if (playerIndex !== -1) {
-      console.log("sta cavando")
       this.realPlayers.splice(playerIndex, 1);
       if(this.status === 'waiting') {
         this.players.splice(playerIndex, 1);
@@ -139,9 +137,7 @@ class Room {
   
   resolveTrick() {
 
-    console.trace('resolveTrick was called');
     if (!this.currentTrick || !Array.isArray(this.currentTrick)) {
-      console.error('Invalid trick cards received:', this.currentTrick);
       throw new Error('Invalid trick cards');
     }
 
@@ -175,10 +171,7 @@ class Room {
     this.players.forEach(player => {
       const bid = this.bids[player.username];
       const tricks = player.tricksWon;
-      console.log('player' + player.username + 'got tricks:' + player.tricksWon )
       
-      //console.log(this.bids)
-      //console.log(`Player ${player.username} - Bid: ${bid}, Tricks: ${tricks}`);
       if (bid === tricks) {
         player.score += 10 + (5 * bid);
       } else {
@@ -188,7 +181,6 @@ class Room {
     });
     
     // Check if game is over or start next round
-    //console.log(this.currentRound*this.players.length)
     if (this.currentRound*this.players.length > 40) {
       this.status = 'finished';
       this.endGame();
