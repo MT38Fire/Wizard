@@ -71,19 +71,19 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
         
         case 'player_left':
           if (message.player.type === 'user') {
-          setPlayers(prev => {
-            const updatedPlayers = prev.filter(p => p !== message.player.username);
-            setCalls(prevCalls =>
-              updatedPlayers.map((player, idx) => {
-                const callObj = prevCalls.find(c => c.username === player);
-                return {
-                  ...callObj,
-                  playerId: idx
-                };
-              })
-            );
-            return updatedPlayers;
-          });
+            setPlayers(prev => {
+              const updatedPlayers = prev.filter(p => p !== message.player.username);
+              setCalls(prevCalls =>
+                updatedPlayers.map((player, idx) => {
+                  const callObj = prevCalls.find(c => c.username === player);
+                  return {
+                    ...callObj,
+                    playerId: idx
+                  };
+                })
+              );
+              return updatedPlayers;
+            });
           } else {
             setBots(prev => [...prev, message.player.username]);
           }
@@ -117,17 +117,22 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
           break;
 
         case 'card_played':
+
           //setta il seme obbligatorio,
           setSuit(message.firstSuit);
           // Update cards played in the center
-          setTimeout(() => {
-            setCardsPlayed(prev => [...prev, {
-              playerId: message.playerId,
-              card: message.card
-            }]);
-          }, 50);
+          setCardsPlayed(prev => [...prev, {
+            playerId: message.playerId,
+            card: message.card
+          }]);
 
           if (message.end !== 0) { // fine trick
+            // Disabilita i click sulle carte per dare tempo di vederle senza causare problemi
+            const cardElements = document.querySelectorAll('.player-card');
+            cardElements.forEach(card => {
+              card.style.pointerEvents = 'none';
+            });
+
             setCalls(prev => prev.map(c => {
                 if (c.playerId === message.nextPlayer) {
                   return {
@@ -138,7 +143,13 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
                 return c;
               }
             ));
-            setTimeout(() => setCardsPlayed([]), 1000);
+            setTimeout(() => {
+              setCardsPlayed([]);
+              // Riabilita i click sulle carte dopo il timeout
+              cardElements.forEach(card => {
+                card.style.pointerEvents = 'auto';
+              });
+            }, 1000);
           }
           setCurrentPlayer(message.nextPlayer);
           break;
@@ -430,12 +441,6 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
         return;
       }
 
-      // Disabilita temporaneamente i click sulle carte
-      const cardElements = document.querySelectorAll('.player-card');
-      cardElements.forEach(card => {
-        card.style.pointerEvents = 'none';
-      });
-
       // Remove the card from hand
       setCards(prev => prev.filter(c => c !== cardId));
       
@@ -446,13 +451,6 @@ function RoomScreen({ username, socket, roomId, roomName, onLeaveRoom }) {
           card: cardId
         }));
       }
-
-      // Riabilita i click dopo 1500ms (1 secondo e mezzo)
-      setTimeout(() => {
-        cardElements.forEach(card => {
-          card.style.pointerEvents = 'auto';
-        });
-      }, 1500);
     }
   };
 
