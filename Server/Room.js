@@ -30,24 +30,34 @@ class Room {
   }
 
   removePlayer(username) {
+    // Trova l'indice in players
     const playerIndex = this.players.findIndex(p => p.username === username);
-    if (playerIndex !== -1) {
-      this.realPlayers.splice(playerIndex, 1);
-      if(this.status === 'waiting') {
-        this.players.splice(playerIndex, 1);
-        return 0;
-      }
+    if (playerIndex === -1) return null;
 
-      this.realPlayers.splice(playerIndex, 1);
-      this.players[playerIndex].type = 'bot'; 
-      return 1
+    // Cerca in realPlayers per username
+    const realPlayerIndex = this.realPlayers.findIndex(p => p.username === username);
+    
+    if (this.status === 'waiting') {
+      // Rimuovi da entrambi gli array
+      if (realPlayerIndex !== -1) {
+        this.realPlayers.splice(realPlayerIndex, 1);
+      }
+      this.players.splice(playerIndex, 1);
       
-      // Se era il creatore a lasciare e ci sono ancora giocatori,
-      // il nuovo creatore diventa il primo giocatore nella lista
-      // non serve farlo, tanto l'admin del gioco diventa in automatico il primo
+      // Riallinea gli ID
+      this.players.forEach((player, index) => {
+        player.id = index;
+      });
+      return 0;
+    } else {
+      // Converte a bot e rimuove solo da realPlayers
+      if (realPlayerIndex !== -1) {
+        this.realPlayers.splice(realPlayerIndex, 1);
+      }
+      this.players[playerIndex].type = 'bot';
       
+      return 1;
     }
-    return null;
   }
 
   startGame() {
