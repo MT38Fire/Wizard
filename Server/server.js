@@ -224,7 +224,7 @@ function handleWebSocketMessage(roomId, user, message) {
       if(room.players[room.currentPlayer].type==='bot' && room.status==='playing' && botEnd==0){
         botPlayingCard();
       }
-    }, 1000);
+    }, 2000);
     return
   }
   switch (message.type) {
@@ -247,14 +247,16 @@ function handleWebSocketMessage(roomId, user, message) {
     case 'leave_room':
       const playerIndex = room.players.findIndex(p => p.username === user);
       if (playerIndex !== -1) {
+        
         const removedPlayer = room.removePlayer(user);
+
         if (activeConnections.has(user)) {
           activeConnections.get(user).close();
           activeConnections.delete(user);
         }
 
         console.log(room.realPlayers);
-        if (room.realPlayers.length === 0) { //TODO rimuovi la stanza se sono tutti bot
+        if (room.realPlayers.length === 0) { // rimuovi la stanza se sono tutti bot
           room.status= 'finished'
           rooms.delete(roomId);
           console.log("deleting room")
